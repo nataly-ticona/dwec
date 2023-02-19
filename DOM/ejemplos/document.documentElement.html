@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <p>Al hacer click en el botón se mostrará
+    el nombre del nodo del documento usando
+    documentElement.</p>
+    <button onclick="funcion()">Haz click</button>
+    <p id="ejemplo"></p>
+<script>
+    function funcion() {
+    var raiz = document.documentElement.nodeName;
+    document.getElementById("ejemplo").innerHTML = `Esta es la raiz de la p = s${raiz}`;
+    }
+</script>
+</body>
+</html>

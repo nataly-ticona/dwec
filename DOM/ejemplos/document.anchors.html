@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Titulo</h1>
+        <a name="contenidos"><h2>Contenidos</h2></a>
+        <ul id="tabla"></ul>
+            <a name="plantas"><h2>Plantas</h2></a>
+            <ol>
+                <li>Naranjas</li>
+                <li>Manzanas</li>
+                <li>Peras</li>
+                <li>Plátanos</li>
+            </ol>
+            <a name="verduras"><h2>Verduras</h2></a>
+            <ol>
+                <li>Zanahoria</li>
+                <li>Puerro</li>
+                <li>Remolacha</li>
+        </ol>
+<script>
+    // en cuanto se carge el documento
+    window.onload = function() {
+        var tabla = document.getElementById("tabla");
+        var i, li, nuevaAncla;
+        // DOCUMENT.ANCHORS son los names que hay en el documento
+        for (i = 0; i < document.anchors.length; i++) {
+            // creamos los elementos
+                li = document.createElement("li");
+                nuevaAncla = document.createElement("a");
+            // ponemos los atributos a la etiqueta <a href=#name[i]>
+                nuevaAncla.href = "#" + document.anchors[i].name;
+            // ponemos el texto a la etiqueta <a>name[i]
+                nuevaAncla.innerHTML = document.anchors[i].text;
+            // los colocamos como los hijos del mayor
+                li.appendChild(nuevaAncla);
+                tabla.appendChild(li);
+        }
+    };
+</script>
+</body>
+</html>
