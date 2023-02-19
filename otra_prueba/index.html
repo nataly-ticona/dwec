@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+
+		<style>
+			.form {
+				max-width: 500px;
+				margin: 50px auto;
+			}
+
+			.users {
+				max-width: 600px;
+				margin: 50px auto;
+			}
+
+			.input:checked {
+				background: red;
+			}
+		</style>
+	</head>
+	<body>
+		<form class="form insertar box" action="conn.php" method="post">
+			<h2 class="title is-4">Información personal</h2>
+			<div class="field">
+				<label class="label">Nombre</label>
+				<div class="control">
+					<input class="input nombre" type="text" name="nombre" pattern="^[a-zA-ZÀ-ÿ\s]+$" />
+				</div>
+			</div>
+
+			<div class="field">
+				<label class="label">Apellidos</label>
+				<div class="control">
+					<input class="input apellidos" type="text" name="apellidos" pattern="^[a-zA-ZÀ-ÿ\s]+$" />
+				</div>
+			</div>
+
+			<div class="field">
+				<label class="label">DNI</label>
+				<div class="control">
+					<input class="input dni" type="text" name="dni" placeholder="00523821F" pattern="(^[XYZ][0-9]{7}[A-Z]{1}$)|(^[0-9]{8}[A-Z]{1}$)" />
+				</div>
+			</div>
+
+			<div class="field">
+				<label class="label">Estudios</label>
+				<div class="control">
+					<label class="checkbox estudios">
+						<input type="checkbox" name="estudios[]" value="DAW" />
+						DAW
+					</label>
+				</div>
+				<div class="control">
+					<label class="checkbox estudios">
+						<input type="checkbox" name="estudios[]" value="DAM" />
+						DAM
+					</label>
+				</div>
+				<div class="control">
+					<label class="checkbox estudios">
+						<input type="checkbox" name="estudios[]" value="ASIR" />
+						ASIR
+					</label>
+				</div>
+			</div>
+
+			<input type="hidden" name="enviar" value="enviar" />
+
+			<div class="field">
+				<div class="control">
+					<button class="insertar button is-link" name="enviar" value="Enviar">Enviar</button>
+				</div>
+			</div>
+		</form>
+
+		<form class="form borrar box" action="conn.php" method="post">
+			<h2 class="title is-4">Borrar usuario</h2>
+
+			<div class="field">
+				<label class="label">DNI</label>
+				<div class="control">
+					<input class="input dni" type="text" name="dni" placeholder="00523821F" pattern="(^[XYZ][0-9]{7}[A-Z]{1}$)|(^[0-9]{8}[A-Z]{1}$)" />
+				</div>
+			</div>
+
+			<input type="hidden" name="borrar" value="borrar" />
+
+			<div class="field">
+				<div class="control">
+					<button class="borrar button is-link" name="borrar" value="borrar">Borrar</button>
+				</div>
+			</div>
+		</form>
+		<div class="users">
+			<table class="table is-striped is-hoverable is-fullwidth"></table>
+		</div>
+
+		<script>
+			const formInsert = document.querySelector(".form.insertar");
+			const formDelete = document.querySelector(".form.borrar");
+			const btnInsert = document.querySelector(".insertar");
+			const btnDelete = document.querySelector(".borrar");
+
+			const nombre = document.querySelectorAll(".nombre");
+			const apellidos = document.querySelectorAll(".apellidos");
+			const dni = document.querySelectorAll(".dni");
+			const estudios = document.querySelectorAll(".estudios input");
+
+			const table = document.querySelector(".table");
+
+			let invalido = false;
+
+			// aplicamos validacinoes a los campos
+			for (const n of nombre) {
+				validateText(n);
+			}
+			for (const n of apellidos) {
+				validateText(n);
+			}
+			for (const n of dni) {
+				validateDni(n);
+			}
+			for (const n of estudios) {
+				validateCheckbox(n);
+			}
+			function validateCheckbox(n) {
+				const help = document.createElement("p");
+				const field = n.parentNode.parentNode.parentNode;
+				n.addEventListener("change", function () {
+					const estudiosChecked = document.querySelectorAll(".estudios input:checked");
+
+					if (field.contains(field.querySelector(".help"))) {
+						field.querySelector(".help").remove();
+					}
+					if (estudiosChecked.length === 0) {
+						invalido = true;
+						help.classList = "help is-danger";
+						help.innerText = `${field.querySelector(".label").textContent} debe tener minimo una opcion selecionada`;
+
+						field.appendChild(help);
+					} else {
+						help.remove();
+						invalido = false;
+					}
+				});
+			}
+
+			function validateText(n) {
+				const control = n.parentNode;
+				const help = document.createElement("p");
+				n.addEventListener("keyup", e => {
+					if (control.contains(control.querySelector(".help"))) {
+						control.querySelector(".help").remove();
+					}
+
+					if (/^[a-zA-ZÀ-ÿ\s]+$/.test(n.value)) {
+						n.classList = "input is-primary";
+
+						help.classList = "help is-success";
+						help.innerText = `${control.parentNode.querySelector(".label").textContent} válido`;
+						control.appendChild(help);
+
+						invalido = false;
+					} else if (n.value === "") {
+						n.classList = "input";
+
+						help.remove();
+						invalido = true;
+					} else {
+						n.classList = "input is-danger";
+
+						help.classList = "help is-danger";
+						help.innerText = `${control.parentNode.querySelector(".label").textContent} no válido`;
+						control.appendChild(help);
+
+						invalido = true;
+					}
+				});
+			}
+
+			async function validateDni(n) {
+				const control = n.parentNode;
+				const help = document.createElement("p");
+
+				let users = await fetchUsers();
+
+				n.addEventListener("keyup", e => {
+					if (control.contains(control.querySelector(".help"))) {
+						control.querySelector(".help").remove();
+					}
+
+					if (formInsert.contains(n)) {
+						if (/(^[XYZ][0-9]{7}[A-Z]{1}$)|(^[0-9]{8}[A-Z]{1}$)/.test(n.value) && users.filter(user => user.dni === n.value).length === 0) {
+							n.classList = "input is-primary";
+
+							help.classList = "help is-success";
+							help.innerText = `${control.parentNode.querySelector(".label").textContent} válido`;
+							control.appendChild(help);
+
+							invalido = false;
+						} else if (n.value === "") {
+							n.classList = "input";
+
+							help.remove();
+
+							invalido = true;
+						} else {
+							n.classList = "input is-danger";
+
+							help.classList = "help is-danger";
+							help.innerText = `${control.parentNode.querySelector(".label").textContent} no válido`;
+							control.appendChild(help);
+
+							invalido = true;
+						}
+					} else {
+						if (/(^[XYZ][0-9]{7}[A-Z]{1}$)|(^[0-9]{8}[A-Z]{1}$)/.test(n.value)) {
+							n.classList = "input is-primary";
+
+							help.classList = "help is-success";
+							help.innerText = `${control.parentNode.querySelector(".label").textContent} válido`;
+							control.appendChild(help);
+
+							invalido = false;
+						} else if (n.value === "") {
+							n.classList = "input";
+
+							help.remove();
+
+							invalido = true;
+						} else {
+							n.classList = "input is-danger";
+
+							help.classList = "help is-danger";
+							help.innerText = `${control.parentNode.querySelector(".label").textContent} no válido`;
+							control.appendChild(help);
+
+							invalido = true;
+						}
+					}
+				});
+			}
+
+			// eventos de submit de los formularios de insert y de delete
+			formInsert.addEventListener("submit", async e => {
+				e.preventDefault();
+
+				console.log(new FormData(formInsert));
+
+				if (!invalido) {
+					await fetch("conn.php", {
+						method: "post",
+						body: new FormData(formInsert)
+					})
+						.then(response => response.json())
+						.then(data => console.log(data))
+						.catch(e => console.log(e));
+				} else {
+					alert("Los datos introducidos no cumplen los requisitos");
+				}
+
+				location.reload();
+			});
+
+			formDelete.addEventListener("submit", async e => {
+				e.preventDefault();
+
+				if (!invalido) {
+					await fetch("conn.php", {
+						method: "post",
+						body: new FormData(formDelete)
+					})
+						.then(response => response.json())
+						.then(data => console.log(data));
+				}
+
+				location.reload();
+			});
+
+			// al cargar la pagina creamos la tabla en la que aparecen los usuarios existentes en la base de datos
+			window.addEventListener("DOMContentLoaded", async e => {
+				let users = await fetchUsers();
+
+				const tr = document.createElement("tr");
+				tr.innerHTML = `<th>Nombre</th> <th>Apellidos</th> <th>DNI</th> <th>Estudios</th>`;
+				table.appendChild(tr);
+
+				for (const user of users) {
+					const tr = document.createElement("tr");
+
+					tr.innerHTML = `<td>${user.nombre}</td> <td>${user.apellidos}</td> <td>${user.dni}</td> <td>${user.estudios}</td>`;
+					table.appendChild(tr);
+				}
+			});
+
+			// funcion con la que recuperamos TODOS los usuarios de la base de datos
+			async function fetchUsers() {
+				users = await fetch("conn.php").then(response => response.json());
+				return users;
+			}
+		</script>
+	</body>
+</html>

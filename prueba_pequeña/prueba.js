@@ -6,7 +6,16 @@ function cargarJSON() {
         .then(function(res){
             return res.json();
         })
+        // obtenemos los datos
         .then(function(data){
-            console.log(data)
+            let html = '';
+            data.forEach(function (persona) {
+                html+=`
+                <p>${persona.nombre} ${persona.apellido} ${persona.dni}</p>
+                `;
+            });
+            // imprimir los datos
+            document.getElementById('resultado').innerHTML=html;
         })
+
 }
