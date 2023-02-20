@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logos</title>
+</head>
+<body>
+    <div id="contenedor">
+        <button name="deportes" id="deportes" onclick="deportes()">Deportes</button>
+        <button name="bebida" id="bebida" onclick="bebida()">Bebida</button>
+        <button name="revista" id="revista" onclick="revista()">Revista</button>
+        <div id="foto">
+
+        </div>
+    </div>
+    <script>        
+    const divFoto = document.getElementById("foto");
+        async function deportes() {
+            // los datos que mandamos para la peticion
+            const url = './deportes.jpg'
+            const opciones = {
+                method: "POST"
+            }
+            // la respuesta con el fetch
+            let response = await fetch(url, opciones)
+            // los datos del objeto en binario
+            const contenidoImagen = await response.blob()
+            const urlImagen = URL.createObjectURL(contenidoImagen);
+            //creamos la imagen y metemos la url
+            const image = document.createElement('img');
+            image.src = urlImagen;
+
+            divFoto.innerHTML="";
+            divFoto.append(image);
+        }
+        async function bebida() {
+            // los datos que mandamos para la peticion
+            const url = './bebida.png'
+            const opciones = {
+                method: "POST"
+            }
+            // la respuesta con el fetch
+            let response = await fetch(url, opciones)
+            // los datos del objeto en binario
+            const contenidoImagen = await response.blob()
+            const urlImagen = URL.createObjectURL(contenidoImagen);
+            //creamos la imagen y metemos la url
+            const image = document.createElement('img');
+            image.src = urlImagen;
+
+            divFoto.innerHTML="";
+            divFoto.append(image);
+        }
+
+        async function revista() {
+            // los datos que mandamos para la peticion
+            const url = './revista.jpg'
+            const opciones = {
+                method: "POST"
+            }
+            // la respuesta con el fetch
+            let response = await fetch(url, opciones)
+            // los datos del objeto en binario
+            const contenidoImagen = await response.blob()
+            const urlImagen = URL.createObjectURL(contenidoImagen);
+            //creamos la imagen y metemos la url
+            const image = document.createElement('img');
+            image.src = urlImagen;
+
+            divFoto.innerHTML="";
+            divFoto.append(image);
+        }
+
+    </script>
+</body>
+</html>
