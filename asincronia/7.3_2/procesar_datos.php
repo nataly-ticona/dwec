@@ -1,7 +1,7 @@
 <?php
 try {
-    $dbname="js";
-    $user="anabel";
+    $dbname="asincronia";
+    $user="nataly";
     $password="1234";
     $dsn = "mysql:host=localhost;dbname=$dbname";
     

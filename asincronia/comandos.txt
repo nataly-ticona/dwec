@@ -1,0 +1,5 @@
+ sudo su - 
+CREATE DATABASE asincronia;
+GRANT ALL PRIVILEGES ON asincronia.* TO 'nataly'@'localhost' WITH GRANT OPTION;
+
+mariadb -u nataly -p asincronia
