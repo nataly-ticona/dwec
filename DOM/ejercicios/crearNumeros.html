@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar numeros</title>
+</head>
+<body>
+    <main class="main">
+        <div class="datos">
+            <p>Introduce numero de checkbox</p> 
+            <input type="number" min="1" id="checkbox" >
+            <input type="button" id="boton" value="Crear checkbox">
+        </div>
+        <div id="contendeorCheckbox"></div>
+    </main>
+    <script> 
+        boton.addEventListener("click", function(){
+            //valores conocidos
+            let boton = document.getElementById("boton");
+            let numeroCheckbox = parseInt(document.getElementById("checkbox").value);
+            //variable para crear los checkbox
+            let contenedorCheckbox = document.getElementById("contendeorCheckbox");
+            //limpiamos la pantalla de los datos anteriores
+            contenedorCheckbox.innerHTML="";
+
+            let titulo = document.createElement("p");
+            titulo.innerText = "Numero de checkbox : "+numeroCheckbox;
+            // metemos como hijo del div el titulo
+            contenedorCheckbox.appendChild(titulo);
+           
+            for (let i = 0; i < numeroCheckbox; i++) {
+                let div = document.createElement("div");
+                let input = document.createElement("input");
+                
+                //añadimos los valores al checkbox
+                input.type="checkbox";
+                input.classList="checkbox"+i;
+                input.value=(Math.random()*10).toFixed(4);
+
+                //añadimos el texto del checkbox
+                let span = document.createElement("span");
+                span.appendChild(document.createTextNode(input.value))
+
+                //añadimos estos dos al div como sus hijos
+                div.appendChild(input)
+                div.appendChild(span);
+                contenedorCheckbox.appendChild(div);
+            }
+        });
+        
+    </script>
+</body>
+</html>

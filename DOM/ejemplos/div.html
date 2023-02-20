@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al documento desde código</title>
+</head>
+<body>
+    <div id="contenedor">
+        <p>Este es el primer párrafo</p>
+        <p>Este es el segundo párrafo</p>
+        <p>Este es el tercer párrafo</p>
+    </div>
+    <button id="boton">Cantidad de Hijos del DIV</button>
+    <div id="resultado">
+        <!-- Este div se rellena mediante JavaScript -->
+    </div>
+    <script>
+        const boton = document.getElementById("boton");
+        const resultado = document.getElementById("resultado");
+
+        boton.addEventListener("click", () => {
+            const contenedor = document.getElementById("contenedor");
+
+            // Eliminar los nodos anteriores si ya existían
+            if (resultado.childNodes.length > 1) {
+                while (resultado.firstChild) {
+                    resultado.removeChild(resultado.firstChild);
+                }
+            }
+
+            let numeroNodos = 0;
+
+            contenedor.childNodes.forEach(node => {
+                if (node.nodeType != 3) {
+                    // Creamos un párrafo
+                    const e = document.createElement("p");
+
+                    // Le añadimos el nombre del nodo
+                    e.innerHTML = node.nodeName;
+
+                    // Añadimos el resultado al div contenedor
+                    resultado.appendChild(e);
+
+                    // Sumamos la cantidad total de nodos (que no sean tipo texto)
+                    numeroNodos++;
+                }
+            });
+
+            // Añadir la cantidad de nodos al resultado
+            const n = document.createElement("p");
+            n.innerHTML = `El número de nodos (sin contar los que son de tipo texto) es ${numeroNodos}`;
+            resultado.appendChild(n);
+        });
+    </script>
+</body>
+</html>

@@ -21,7 +21,7 @@
             <label for="estudios">Estudios</label>
                 <input type="text" name="estudio" id="estudios" placeholder="DAW, DAM o ASIR"> 
             <br>
-            <button name="enviar" type="submit">Ingresar usuario</button>           
+            <button name="enviar" type="submit" id="enviar">Ingresar usuario</button>           
     </form>
     <br>
     <form action="validador.php" method="post" id="formulario-borrar">
@@ -33,9 +33,10 @@
     <script>
         const enviarFormulario = document.getElementById("formulario-enviar");
         const borrarFormulario = document.getElementById("formulario-borrar");
-        
+        const botonEnviar = document.getElementById("enviar");
+
         // eventos de submit de los formularios de insert y de delete
-        enviarFormulario.addEventListener("submit", async e => {
+        botonEnviar.addEventListener("click", async e => {
             e.preventDefault();
             await fetch("validador.php", {
                     method: "post",
@@ -44,6 +45,7 @@
                 })
                     .then(response => response.json())
                     .then(data => console.log(data))
+                    .catch(e => console.log(e));
             location.reload();
         });
 

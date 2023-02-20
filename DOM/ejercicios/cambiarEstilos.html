@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titulo dinamico</title>
+</head>
+<body>
+    <div>
+        <p id="titulo">Este es un titulo dinamico</p>
+        <button onclick="cambiarColor()"> Cambiar color</button>
+        <button onclick="cambiarTamano()"> Cambiar tamaño fuente</button>
+    </div>
+    <script>
+        var titulo = document.getElementById("titulo");
+        function cambiarColor(){
+            let colorNuevo =  "rgb("+Math.round(Math.random()*254)+","+Math.round(Math.random()*254)+","+Math.round(Math.random()*254)+")";
+            titulo.style.color=colorNuevo;
+        }
+        function cambiarTamano(){
+            let tamano = ""+Math.round(Math.random()*100)+"px";
+            titulo.style.fontSize=tamano;
+        }
+
+    </script>
+</body>
+</html>
